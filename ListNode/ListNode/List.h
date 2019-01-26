@@ -18,7 +18,17 @@ public:
 	T remove(Posi(T) p);//删除节点
 	int clear();//清空列表
 	int deduplicate();//删除列表的重复元素
+	int uniquify();//有序列表唯一化
+	//有序列表的查找:在P的n个真前驱中找到不大于e的最后者
+	Posi(T) serch(T const &e, int n, Posi(T) p);
+	//对列表中起始于P的连续n个元素做选择排序
+	void selectionSort(Posi(T) p, int n);
+	//交换两个节点的数据域
+	void swapTwo(Posi(T) p1, Posi(T) p2);
 protected:
+	//找到起始位置为p的n个元素中最大的
+	Posi(T) selectMax(Posi(T) p, int n);
+	
 };
 template<class T>
 void List<T>::init()
@@ -114,5 +124,84 @@ int List<T>::deduplicate()
 		}
 	}
 	return oldsize - _size;
+}
+template<class T>
+int List<T>::uniquify()
+{
+	if (_size < 2)//不超过两个元素列表必然无重复
+	{
+		return 0;
+	}
+	Posi(T) p = header;//记录各区段起点
+	Posi(T) q;//记录当前起点后继位置
+	int oldsize = _size;//记录列表原始规模
+	int r = 1;//从位置1开始检查
+	while (trailer != (q = p->succ))
+	{
+		if (q->data != p->data)
+		{
+			p = q;
+		}
+		else
+		{
+			remove(q);
+		}
+	}
+	return oldsize - _size;
+}
+template<class T>
+Posi(T) List<T>::serch(T const &e, int n, Posi(T) p)
+{
+	while (n--)
+	{
+		if (((p = p->pred)->data) <= e)
+		{
+			break;
+		}
+	}
+	return p;
+}
+template<class T>
+Posi(T) List<T>::selectMax(Posi(T) p, int n)
+{
+	Posi(T) max = p;
+	while (n > 1)
+	{
+		if (((p = p->succ)->data) >= max->data)
+		{
+			max = p;
+		}
+		--n;
+	}
+	return max;
+}
+template<class T>
+void List<T>::swapTwo(Posi(T) p1, Posi(T) p2)
+{
+	T cont1;//用于交换数据的容器1
+	T cont2;//用于交换数据的容器2
+	T temp;//中间变量
+	cont1 = p1->data;
+	cont2 = p2->data;
+	temp = cont1;
+	cont1 = cont2;
+	cont2 = temp;
+}
+template<class T>
+void List<T>::selectionSort(Posi(T) p, int n)
+{
+	Posi(T) head = p->pred;//设置头哨兵
+	Posi(T) trail = p;
+	
+	for (int i = 0; i < n; ++i)//设置尾哨兵
+	{
+		trail = trail->succ;
+	}
+	while (n > 1)
+	{
+		swapTwo(selectMax(head, n), trail->pred);
+		trail = trail->pred;
+		--n;
+	}
 }
 #endif // _LIST
