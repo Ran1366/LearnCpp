@@ -1,4 +1,4 @@
-a.out:main.cc
+a.out:main.cpp
 	g++ $< -o $@ 
 .PHONY:clean
 clean:
