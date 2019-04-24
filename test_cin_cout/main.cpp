@@ -24,6 +24,7 @@ int main()
   //std::cout << "*/" << std::endl;
   //std::cout << /* "*" */  std::endl;
   //std::cout << /* "*/" /* "/*" */;
-  ran::cout = 10; 
-  cout << ran::cout << endl;
+  
+  //ran::cout = 10; 
+  //cout << ran::cout << endl;
 }
